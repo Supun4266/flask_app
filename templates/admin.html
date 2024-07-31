@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .card {
+            margin-bottom: 20px;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            border: none;
+            border-radius: 15px;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .table th, .table td {
+            vertical-align: middle;
+        }
+        .img-thumbnail {
+            max-width: 100px;
+            height: auto;
+            border-radius: 15px;
+        }
+        .btn-primary, .btn-warning, .btn-danger {
+            border-radius: 50px;
+        }
+        .badge-primary {
+            background-color: #007bff;
+        }
+        .badge-primary:hover {
+            background-color: #0056b3;
+        }
+        .list-group-item {
+            border: none;
+            padding: 0.75rem 1.25rem;
+        }
+        .list-group-item:not(:last-child) {
+            border-bottom: 1px solid #e9ecef;
+        }
+        .list-group-item:first-child {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .list-group-item:last-child {
+            border-bottom-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+        }
+        .card-body {
+            padding: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="display-4">Admin Dashboard</h1>
+            <a href="/logout" class="btn btn-danger btn-lg">Logout</a>
+        </div>
+        <p class="lead">Welcome, Admin!</p>
+        <a href="/add_post" class="btn btn-primary btn-lg mb-4">Add New Post</a>
+        <h2 class="mb-4">Posts</h2>
+        <div class="row">
+            {% for post in posts %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card">
+                    <img src="{{ url_for('uploaded_file', filename=post.image) }}" class="card-img-top img-thumbnail" alt="{{ post.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <p class="card-text">Likes: <span class="badge badge-primary">{{ post.likes }}</span></p>
+                        <h6>Comments:</h6>
+                        <ul class="list-group list-group-flush">
+                            {% for comment in post.comments %}
+                            <li class="list-group-item">
+                                <strong>{{ comment.author }}</strong>: {{ comment.text }}
+                            </li>
+                            {% endfor %}
+                        </ul>
+                        <div class="d-flex justify-content-between mt-3">
+                            <a href="/edit_post/{{ post._id }}" class="btn btn-warning">Edit</a>
+                            <form action="/delete_post/{{ post._id }}" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
